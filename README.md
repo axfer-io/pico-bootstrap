@@ -24,11 +24,10 @@ using SWD (no BOOTSEL workflows).
 
 ## Supported OS
 
-- Pop!_OS
-- Ubuntu
-- Debian-based distributions
-
-> Requires sudo privileges and internet access.
+| OS | Script | Notes |
+|----|--------|-------|
+| Pop!_OS / Ubuntu / Debian | `install.sh` | Requires `sudo` |
+| Windows 11 | `install.ps1` | No admin required (uses Scoop) |
 
 ---
 
@@ -60,7 +59,7 @@ using SWD (no BOOTSEL workflows).
 
 ## Installation
 
-Clone this repository and run the installer:
+### Linux (Ubuntu / Debian / Pop!_OS)
 
 ```bash
 git clone https://github.com/axfer-io/pico-bootstrap.git
@@ -69,7 +68,23 @@ chmod +x install.sh
 ./install.sh
 ```
 
-The script is **idempotent**:
+### Windows 11
+
+Open **PowerShell** (no admin needed) and run:
+
+```powershell
+git clone https://github.com/axfer-io/pico-bootstrap.git
+cd pico-bootstrap
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser   # once, if not already set
+.\install.ps1
+```
+
+`install.ps1` installs [Scoop](https://scoop.sh/) automatically if it is not
+already present and uses it to install all required packages.
+
+---
+
+Both scripts are **idempotent**:
 - Safe to run multiple times
 - Updates existing repos when possible
 - Does not duplicate environment variables
@@ -100,7 +115,7 @@ After installation:
 
 ## Environment Variables
 
-The installer appends the following to `~/.bashrc` (if missing):
+### Linux — appended to `~/.bashrc`
 
 ```bash
 export PICO_SDK_PATH="$HOME/pico/pico-sdk"
@@ -110,11 +125,19 @@ export PICO_PLAYGROUND_PATH="$HOME/pico/pico-playground"
 export PATH="$HOME/pico/tools:$PATH"
 ```
 
-Reload your shell after installation:
+Reload: `source ~/.bashrc`
 
-```bash
-source ~/.bashrc
+### Windows 11 — set as User environment variables + PowerShell profile
+
+```powershell
+$env:PICO_SDK_PATH        = "$HOME\pico\pico-sdk"
+$env:PICO_EXAMPLES_PATH   = "$HOME\pico\pico-examples"
+$env:PICO_EXTRAS_PATH     = "$HOME\pico\pico-extras"
+$env:PICO_PLAYGROUND_PATH = "$HOME\pico\pico-playground"
+$env:PATH                 = "$HOME\pico\tools;$env:PATH"
 ```
+
+Reload: `. $PROFILE`
 
 ---
 
